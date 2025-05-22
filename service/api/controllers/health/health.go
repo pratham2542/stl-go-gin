@@ -1,14 +1,16 @@
 package health
 
 import (
+	"errors"
 	"test-go/internals"
 
 	"github.com/gin-gonic/gin"
 )
 
 func HealthController(appCtx internals.AppContext, c *gin.Context) (any, error) {
-	user := map[string]string{"id": "1", "name": "Alice"}
-	return gin.H{"user": user}, nil
+	// user := map[string]string{"id": "1", "name": "Alice"}
+	// return gin.H{"user": user}, nil
+	return nil, errors.New("no records found")
 }
 
 func DeleteController(appCtx internals.AppContext, c *gin.Context) (any, error) {

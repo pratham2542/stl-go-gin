@@ -16,7 +16,7 @@ type HandlerFunc func(AppContext, *gin.Context) (any, error)
 
 func HandlerWrapper(appCtx AppContext, handlerf HandlerFunc) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var res any
+		var resp Response
 		defer func() {
 			switch exception := recover(); exception {
 			case nil:
@@ -32,7 +32,12 @@ func HandlerWrapper(appCtx AppContext, handlerf HandlerFunc) gin.HandlerFunc {
 					statusCode = http.StatusOK
 				}
 
-				switch v := res.(type) {
+				if resp.Err != nil {
+					c.JSON(http.StatusInternalServerError, ErrorResponse{Error: resp.Err.Error()})
+					return
+				}
+
+				switch v := resp.Res.(type) {
 				case nil:
 					c.Status(http.StatusNoContent)
 				case gin.H:
@@ -50,13 +55,18 @@ func HandlerWrapper(appCtx AppContext, handlerf HandlerFunc) gin.HandlerFunc {
 		}()
 
 		res, err := handlerf(appCtx, c)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, ErrorResponse{Error: err.Error()})
-			return
+		resp = Response{
+			Res: res,
+			Err: err,
 		}
 	}
 }
 
 type ErrorResponse struct {
 	Error string `json:"error"`
+}
+
+type Response struct {
+	Res any
+	Err error
 }
