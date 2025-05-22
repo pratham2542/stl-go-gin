@@ -18,3 +18,7 @@ func DeleteController(appCtx internals.AppContext, c *gin.Context) (any, error) 
 func CreateController(appCtx internals.AppContext, c *gin.Context) (any, error) {
 	return gin.H{"created": true}, nil
 }
+
+func UpdateController(appCtx internals.AppContext, c *gin.Context) (any, error) {
+	return gin.H{"Updated": true}, nil
+}

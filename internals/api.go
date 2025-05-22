@@ -19,8 +19,10 @@ func HandlerWrapper(appCtx AppContext, handlerf HandlerFunc) gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		}
 
-		var statusCode int = 500
+		var statusCode int = http.StatusInternalServerError
 		switch c.Request.Method {
+		case http.MethodPut, http.MethodPatch:
+			statusCode = http.StatusNoContent
 		case http.MethodPost:
 			statusCode = http.StatusCreated
 		case http.MethodDelete:

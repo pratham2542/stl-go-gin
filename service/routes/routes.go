@@ -47,5 +47,8 @@ func (s *Server) AddRoutes() *Server {
 	v1.GET("/test", internals.HandlerWrapper(s.appContext, health.HealthController))
 	v1.DELETE("/delete", internals.HandlerWrapper(s.appContext, health.DeleteController))
 	v1.POST("/create", internals.HandlerWrapper(s.appContext, health.DeleteController))
+	v1.PATCH("/updated/patch", internals.HandlerWrapper(s.appContext, health.UpdateController))
+	v1.PUT("/updated/put", internals.HandlerWrapper(s.appContext, health.UpdateController))
+
 	return s
 }
